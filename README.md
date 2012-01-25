@@ -8,6 +8,20 @@ Functionality will be made available without the need to modify any other librar
 
 The `PusherExt` object inherits from the `Pusher` object so you can use it as you do the Pusher object.
 
+## How to use the library
+
+1. Include the standard Pusher library
+2. Include the PusherExt library
+
+    <script src="http://js.pusher.com/1.11/pusher.min.js"></script>
+    <script src="some_path/PusherExt.js"></script>
+    <script>
+      var options = {/* options */};
+      var pusherExt = new PusherExt('APP_KEY', options);
+    </script>
+    
+3. Since the `PusherExt` object extends the `Pusher` object you can use it as you do the `Pusher` object.
+
 ## Alpha Functionality in library
 
 The functionality that must be considered as Alpha that is present within this library is:
