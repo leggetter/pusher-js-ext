@@ -81,7 +81,7 @@ $(function(){
     
   });
   
-  asyncTest("can subscribe private and presence channels", function() {
+  asyncTest("can subscribe public, private and presence channels", function() {
     
     var pusher = new Pusher(APP_KEY);
     pusherExt = new PusherExt(pusher, {
@@ -90,7 +90,7 @@ $(function(){
     
     pusher.connection.bind('connected', function() {
       
-      var channels = pusherExt.multiSubscribe(['public-channel', 'private-channel1', 'presence-channel2']);
+      var channels = pusherExt.multiSubscribe(['public-channel1', 'private-channel1', 'presence-channel2']);
       var subscribed = 0;
       var handler = function() {
         ++subscribed;
@@ -100,6 +100,7 @@ $(function(){
           start();
         }
       }
+      channels['public-channel1'].bind('pusher:subscription_succeeded', handler);
       channels['private-channel1'].bind('pusher:subscription_succeeded', handler);
       channels['presence-channel2'].bind('pusher:subscription_succeeded', handler);      
     });

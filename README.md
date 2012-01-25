@@ -21,6 +21,17 @@ The functionality that must be considered as Alpha that is present within this l
     
 For additional usage see the acceptance tests in:
 `acceptance_tests/PusherExtTests.js`
+
+The code for the server authentication can be seen in:
+`acceptance_tests/multiPreAuth.php`
+
+The JSON response from the authentication endpoint should look the same as a standard authentication response but the auth for each channel should be identified within a hash:
+
+    {
+      "private-channel1":"{\"auth\":\"c9f5043738b6f7e428fa:00b91a51f643fbd969351f47650e668bf5d312800963509b56a12cb0d8504800\"}",
+      "private-channel2":"{\"auth\":\"c9f5043738b6f7e428fa:f02e31d43de2bc799e3f023e9c3ad9228af084aded4ebdf8846dd935889099a9\"}",
+      "private-channel3":"{\"auth\":\"c9f5043738b6f7e428fa:cb15298d5e2135cb05edda5a8b0c84b5715a0dc3e43ae9532b1717c334bb2797\"}"
+    }
     
 #### TODO
 
