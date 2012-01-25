@@ -63,7 +63,7 @@ $(function(){
     var xhr = window.XMLHttpRequest ?
       new XMLHttpRequest() :
       new ActiveXObject("Microsoft.XMLHTTP");
-    xhr.open("POST", 'php/multiPreAuth.php', true);
+    xhr.open("POST", 'php/multi_pre_auth.php', true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4) {

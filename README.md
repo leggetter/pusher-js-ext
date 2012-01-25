@@ -40,3 +40,21 @@ The JSON response from the authentication endpoint should look the same as a sta
 
 1. Subscriptions can only be made once the connection is in a 'connected' state because the `pusher.connection.socket_id` hasn't been set. Need to have pending subscriptions.
 2. If connection is lost each subscription will be subscribed to individually.
+
+### The ability to send additional parameters to the server with the subscription authentication AJAX call
+
+**Request:** <http://pusher.tenderapp.com/discussions/requests/15-i-want-to-be-able-to-append-request-parameters-to-private-and-presence-channel-authentication-requests-eg-a-csrf-token>
+
+By using the `PusherExt` object it is possible to use pass additional parameters to the `Pusher.channel_auth_endpoint` by passing in additional options to the `PusherExt` constructor.
+
+    var px = new PusherExt('MY_APP_KEY', {
+      authParams: {
+        CSRFToken: 'SOME AWESOME TOKEN'
+      }
+    });
+    
+In the example above a `CSRFToken` parameter with a value of `SOME AWESOME TOKEN` will be passed along with the `socket_id` and `channel_name` parameters to the authentication endpoint.
+    
+#### TODO:
+
+1. The ability to set parameters on an individual authentication call basis.

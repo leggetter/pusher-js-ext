@@ -34,7 +34,7 @@ $(function(){
   asyncTest("can subscribe multiple private channels", function() {
     
     var pusherExt = new PusherExt(APP_KEY, {
-      multiPreAuthEndPoint: 'php/multiPreAuth.php'
+      multiPreAuthEndPoint: 'php/multi_pre_auth.php'
     });
     
     pusherExt.connection.bind('connected', function() {
@@ -58,7 +58,7 @@ $(function(){
   asyncTest("can subscribe multiple presence channels", function() {
     
     var pusherExt = new PusherExt(APP_KEY, {
-      multiPreAuthEndPoint: 'php/multiPreAuth.php'
+      multiPreAuthEndPoint: 'php/multi_pre_auth.php'
     });
     
     pusherExt.connection.bind('connected', function() {
@@ -82,7 +82,7 @@ $(function(){
   asyncTest("can subscribe public, private and presence channels", function() {
     
     var pusherExt = new PusherExt(APP_KEY, {
-      multiPreAuthEndPoint: 'php/multiPreAuth.php'
+      multiPreAuthEndPoint: 'php/multi_pre_auth.php'
     });
     
     pusherExt.connection.bind('connected', function() {
@@ -106,7 +106,7 @@ $(function(){
   
   function canSubscribe(channelName) {
     var pusherExt = new PusherExt(APP_KEY, {
-      multiPreAuthEndPoint: 'php/multiPreAuth.php'
+      multiPreAuthEndPoint: 'php/multi_pre_auth.php'
     });
     
     pusherExt.connection.bind('connected', function() {
