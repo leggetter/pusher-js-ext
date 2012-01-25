@@ -1,10 +1,9 @@
 (function(module) {
 
-  var PusherExt = function(pusher, options) {
-    decorate(this, pusher);
+  var PusherExt = function(appKey, options) {
     
-    this._pusher = pusher;
-    this._pusher.__ext = this;
+    Pusher.call(this, appKey, options);
+
     this.options = options || {};
     
     this._pendingPreAjax = [];
@@ -18,6 +17,7 @@
       Pusher.authorizers['multPreAuth'] = PusherExt.multiPreAuth
     }
   };
+  extend(PusherExt, Pusher);
   
   /** @private */  
   PusherExt.prototype._checkPendingAuthCallbacks = function() {
@@ -52,7 +52,7 @@
     var subscribedChannels = {};
     var channel = null;
     for(var i = 0, l = channels.length; i < l; ++i) {
-      channel = this._pusher.subscribe(channels[i]);
+      channel = this.subscribe(channels[i]);
       subscribedChannels[channel.name] = channel;
     }
     
@@ -62,7 +62,7 @@
   PusherExt.multiPreAuth = function(pusher, callback) {
     // `this` will refer to the channel being authorised.
     var channel = this;
-    var self = pusher.__ext;
+    var self = pusher;
     if(self._pendingCallbacks[channel.name] !== undefined) {
       Pusher.warn('A channel named "' + channel.name + '" is already being authorized.');
     }
@@ -78,7 +78,7 @@
       return;
     }
     
-    if(this._pusher.connection.state !== 'connected') {
+    if(this.connection.state !== 'connected') {
       Pusher.warn('multiSubscribe does not presently work if not connected');
       this._pendingPreAjax = this._pendingPreAjax.concat(channels);
       return;
@@ -87,7 +87,7 @@
     var self = this;
     
     var authRequest = {
-      socket_id: this._pusher.connection.socket_id,
+      socket_id: this.connection.socket_id,
       channels: channels
     };
     
@@ -179,15 +179,15 @@
   };
   
   /** @private */  
-  function decorate(decorateWhat, decorateWith) {
-    for(var prop in decorateWith) {
-      if(typeof decorateWith[prop] === 'function') {
-        decorateWhat[prop] = function() {
-          return decorateWith[prop].apply(arguments);
-        };
-      }
-    }
-  };
+  function extend(subClass, baseClass) {
+     function inheritance() {}
+     inheritance.prototype = baseClass.prototype;
+
+     subClass.prototype = new inheritance();
+     subClass.prototype.constructor = subClass;
+     subClass.baseConstructor = baseClass;
+     subClass.superClass = baseClass.prototype;
+  }
   
   module.PusherExt = PusherExt;
 

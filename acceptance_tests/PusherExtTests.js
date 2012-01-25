@@ -33,12 +33,11 @@ $(function(){
   // TODO: refactor these tests
   asyncTest("can subscribe multiple private channels", function() {
     
-    var pusher = new Pusher(APP_KEY);
-    pusherExt = new PusherExt(pusher, {
+    var pusherExt = new PusherExt(APP_KEY, {
       multiPreAuthEndPoint: 'php/multiPreAuth.php'
     });
     
-    pusher.connection.bind('connected', function() {
+    pusherExt.connection.bind('connected', function() {
       
       var channels = pusherExt.multiSubscribe(['private-channel1', 'private-channel2']);
       var subscribed = 0;
@@ -58,12 +57,11 @@ $(function(){
   
   asyncTest("can subscribe multiple presence channels", function() {
     
-    var pusher = new Pusher(APP_KEY);
-    pusherExt = new PusherExt(pusher, {
+    var pusherExt = new PusherExt(APP_KEY, {
       multiPreAuthEndPoint: 'php/multiPreAuth.php'
     });
     
-    pusher.connection.bind('connected', function() {
+    pusherExt.connection.bind('connected', function() {
       
       var channels = pusherExt.multiSubscribe(['presence-channel1', 'presence-channel2']);
       var subscribed = 0;
@@ -83,12 +81,11 @@ $(function(){
   
   asyncTest("can subscribe public, private and presence channels", function() {
     
-    var pusher = new Pusher(APP_KEY);
-    pusherExt = new PusherExt(pusher, {
+    var pusherExt = new PusherExt(APP_KEY, {
       multiPreAuthEndPoint: 'php/multiPreAuth.php'
     });
     
-    pusher.connection.bind('connected', function() {
+    pusherExt.connection.bind('connected', function() {
       
       var channels = pusherExt.multiSubscribe(['public-channel1', 'private-channel1', 'presence-channel2']);
       var subscribed = 0;
@@ -108,12 +105,11 @@ $(function(){
   });
   
   function canSubscribe(channelName) {
-    var pusher = new Pusher(APP_KEY);
-    pusherExt = new PusherExt(pusher, {
+    var pusherExt = new PusherExt(APP_KEY, {
       multiPreAuthEndPoint: 'php/multiPreAuth.php'
     });
     
-    pusher.connection.bind('connected', function() {
+    pusherExt.connection.bind('connected', function() {
       
       var channels = pusherExt.multiSubscribe([channelName]);
       var channel = channels[channelName];

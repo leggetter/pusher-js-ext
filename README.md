@@ -4,14 +4,17 @@ This library is used as a playground for functionality that might be considered 
 
 Functionality will be made available without the need to modify any other library. This should include the Pusher core JavaScript library and any server libraries.
 
+## Inheritance
+
+The `PusherExt` object inherits from the `Pusher` object so you can use it as you do the Pusher object.
+
 ## Alpha Functionality in library
 
 The functionality that must be considered as Alpha that is present within this library is:
 
 ### The ability to subscribe to multiple subscriptions within a single call
 
-    var pusher = new Pusher('YOUR_APP_KEY');
-    pusherExt = new PusherExt(pusher, {
+    var pusherExt = new PusherExt('YOUR_APP_KEY', {
       multiPreAuthEndPoint: 'php/multiPreAuth.php'
     });
     var channels = pusherExt.multiSubscribe(['channel', 'private-channel', 'presence-channel']);
@@ -37,4 +40,3 @@ The JSON response from the authentication endpoint should look the same as a sta
 
 1. Subscriptions can only be made once the connection is in a 'connected' state because the `pusher.connection.socket_id` hasn't been set. Need to have pending subscriptions.
 2. If connection is lost each subscription will be subscribed to individually.
-3. At the moment the `PusherExt` object holds a reference to the `Pusher` object. Inheritance is probably a better way of doing this.

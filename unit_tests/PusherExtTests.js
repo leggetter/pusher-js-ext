@@ -1,66 +1,40 @@
 $(function(){
-  Pusher = {};
-  Pusher.channel_auth_transport = null;
-  Pusher.authorizers = {};
-  Pusher.error = function(){};
-  Pusher.warn = function(){};
-  
-  var DummyConnection = function() {
-    this.socket_id = 'some_socket_id';
-    this.state = 'connected';
-  };
-  var DummyPusher = function() {
-    this.subscribeCalls = [];
-    this.subscribe = function(name) {
-      this.subscribeCalls.push(arguments);
-      return new DummyChannel(name)
-    }
-    this.connection = new DummyConnection();
-  };
-  var DummyChannel = function(name) {
-    this.name = name;
-  };
     
   module("PusherExt Tests");
 
   test("PusherExt is decorated with public functions", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher);
+    var px = new PusherExt('MY_APP_KEY');
     
     ok(typeof px.subscribe === 'function');
   });
   
   test("public channels are subscribed to without auth", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher);
+    var px = new PusherExt('MY_APP_KEY');
     
     px.multiSubscribe(['channel1']);
     
-    equals(pusher.subscribeCalls.length, 1);
+    equals(px.subscribeCalls.length, 1);
   });
   
   test("Pusher.channel_auth_transport is set to multPreAuth if multiPreAuthEndPoint is set", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher, {multiPreAuthEndPoint:'/fish'});
+    var px = new PusherExt('MY_APP_KEY', {multiPreAuthEndPoint:'/fish'});
     
     equals(Pusher.channel_auth_transport, 'multPreAuth');
   });
   
   test("Pusher.authorizers.multPreAuth is appended if multiPreAuthEndPoint is set", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher, {multiPreAuthEndPoint:'/fish'});
+    var px = new PusherExt('MY_APP_KEY', {multiPreAuthEndPoint:'/fish'});
     
     equals(PusherExt.multiPreAuth, Pusher.authorizers['multPreAuth']);
   });
   
   test("single channel is returned from multiSubscribe call", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher);
+    var px = new PusherExt('MY_APP_KEY');
     
     var channels = px.multiSubscribe(['channel1']);
     
@@ -69,8 +43,7 @@ $(function(){
   
   test("test multiSubscribe returns hash of channel name to Channel objects", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher);
+    var px = new PusherExt('MY_APP_KEY');
     
     var channels = px.multiSubscribe(['channel1', 'channel2']);
     
@@ -80,21 +53,19 @@ $(function(){
   
   test("test calling multiSubscribe with once private channel calls pusher.subscribe", function() {
     
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher, {multiPreAuthEndPoint:'/multi_pre_auth'});
+    var px = new PusherExt('MY_APP_KEY', {multiPreAuthEndPoint:'/multi_pre_auth'});
     px._doAjax = function() {}; // stop AJAX call occuring
     
     px.multiSubscribe(['private-channel1']);
     
     px._multiAuthAjaxCallback(false, { 'channel1': {auth:'some_auth_string'} });
     
-    equals(pusher.subscribeCalls.length, 1);
+    equals(px.subscribeCalls.length, 1);
   });
   
   test("multiSubscribe calls multiPreAuth with 2 channels (private and presence)", function() {
 
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher, {multiPreAuthEndPoint:'/multi_pre_auth'});
+    var px = new PusherExt('MY_APP_KEY', {multiPreAuthEndPoint:'/multi_pre_auth'});
     
     var subscribeToChannels = ['private-channel1', 'presence-channel2'];
     
@@ -113,8 +84,7 @@ $(function(){
   
   test("multiSubscribe calls multiPreAuth with no channels", function() {
 
-    var pusher = new DummyPusher();
-    var px = new PusherExt(pusher, {multiPreAuthEndPoint:'/multi_pre_auth'});
+    var px = new PusherExt('MY_APP_KEY', {multiPreAuthEndPoint:'/multi_pre_auth'});
     
     var subscribeToChannels = ['channel1', 'channel2'];
     
