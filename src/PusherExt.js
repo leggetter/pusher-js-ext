@@ -87,6 +87,47 @@
   ///////////////////////////////////////
   // Multi Auth
   
+  /**
+   * Subscribe to multiple channels in a single call. This also means that the authentication
+   * endpoints is called requesting authorisation for the subscriptions within a single call.
+   * AJAX authentication only at the moment.
+   *
+   * @param {Array} channels An array of string channel names.
+   *
+   * @return {Hash} of channel names to channel objects.
+   */
+  PusherExt.prototype.multiSubscribe = function(channels) {
+    var sortedChannels = sortChannels(channels);
+    this._multiAuth(sortedChannels.requireAuth);
+    
+    var subscribedChannels = {};
+    var channel = null;
+    for(var i = 0, l = channels.length; i < l; ++i) {
+      channel = this.subscribe(channels[i]);
+      subscribedChannels[channel.name] = channel;
+    }
+    
+    return subscribedChannels;
+  };
+  
+  /**
+   * @private
+   *
+   * Called by the authentication mechanism within Pusher.
+   */
+  PusherExt.multiPreAuth = function(pusher, callback) {
+    // `this` will refer to the channel being authorised.
+    var channel = this;
+    var self = pusher;
+    if(self._pendingCallbacks[channel.name] !== undefined) {
+      Pusher.warn('A channel named "' + channel.name + '" is already being authorized.');
+    }
+    
+    self._pendingCallbacks[channel.name] = {channel: channel, callback: callback};
+    
+    self._checkPendingAuthCallbacks();
+  }; 
+  
   /** @private */  
   PusherExt.prototype._checkPendingAuthCallbacks = function() {
     if(this._preAuthAjaxWaiting === 0) {
@@ -111,33 +152,6 @@
         callback(wasError, authData);
       }
     }
-  };
-  
-  PusherExt.prototype.multiSubscribe = function(channels) {
-    var sortedChannels = sortChannels(channels);
-    this._multiAuth(sortedChannels.requireAuth);
-    
-    var subscribedChannels = {};
-    var channel = null;
-    for(var i = 0, l = channels.length; i < l; ++i) {
-      channel = this.subscribe(channels[i]);
-      subscribedChannels[channel.name] = channel;
-    }
-    
-    return subscribedChannels;
-  };
-  
-  PusherExt.multiPreAuth = function(pusher, callback) {
-    // `this` will refer to the channel being authorised.
-    var channel = this;
-    var self = pusher;
-    if(self._pendingCallbacks[channel.name] !== undefined) {
-      Pusher.warn('A channel named "' + channel.name + '" is already being authorized.');
-    }
-    
-    self._pendingCallbacks[channel.name] = {channel: channel, callback: callback};
-    
-    self._checkPendingAuthCallbacks();
   };
   
   /** @private */  
