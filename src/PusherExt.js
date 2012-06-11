@@ -55,15 +55,15 @@
    */
   PusherExt.multiPreAuth = function(pusher, callback) {
     // `this` will refer to the channel being authorised.
-    var channel = this;
-    var self = pusher;
-    if(self._pendingCallbacks[channel.name] !== undefined) {
+    var channel = this.channel;
+    var pusher = channel.pusher;
+    if(pusher._pendingCallbacks[channel.name] !== undefined) {
       Pusher.warn('A channel named "' + channel.name + '" is already being authorized.');
     }
     
-    self._pendingCallbacks[channel.name] = {channel: channel, callback: callback};
+    pusher._pendingCallbacks[channel.name] = {channel: channel, callback: callback};
     
-    self._checkPendingAuthCallbacks();
+    pusher._checkPendingAuthCallbacks();
   }; 
   
   /** @private */  

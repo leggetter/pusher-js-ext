@@ -1,8 +1,12 @@
 # The Pusher JS Ext library
 
-This library is used as a playground for functionality that might be considered to be added to the Pusher core JavaScript library.
+This library is used as a playground for functionality that might be considered to be added to the [Pusher core JavaScript library](https://github.com/pusher/pusher-js).
 
 Functionality will be made available without the need to modify any other library. This should include the Pusher core JavaScript library and any server libraries.
+
+## Compatibility
+
+This library is intended to be used with version 1.12 of pusher-js.
 
 ## Inheritance
 
@@ -24,7 +28,7 @@ The `PusherExt` object inherits from the `Pusher` object so you can use it as yo
 
 ## Alpha Functionality in library
 
-The functionality that must be considered as Alpha that is present within this library is:
+The functionality that must be considered as pre-Alpha that is present within this library is:
 
 ### The ability to subscribe to multiple subscriptions within a single call
 
@@ -57,18 +61,4 @@ The JSON response from the authentication endpoint should look the same as a sta
 
 ### The ability to send additional parameters to the server with the subscription authentication AJAX call
 
-**Request:** <http://pusher.tenderapp.com/discussions/requests/15-i-want-to-be-able-to-append-request-parameters-to-private-and-presence-channel-authentication-requests-eg-a-csrf-token>
-
-By using the `PusherExt` object it is possible to use pass additional parameters to the `Pusher.channel_auth_endpoint` by passing in additional options to the `PusherExt` constructor.
-
-    var px = new PusherExt('MY_APP_KEY', {
-      authParams: {
-        CSRFToken: 'SOME AWESOME TOKEN'
-      }
-    });
-    
-In the example above a `CSRFToken` parameter with a value of `SOME AWESOME TOKEN` will be passed along with the `socket_id` and `channel_name` parameters to the authentication endpoint.
-    
-#### TODO:
-
-1. The ability to set parameters on an individual authentication call basis.
+**This functionality was removed as it is now present in 1.12 of the official pusher-js**
