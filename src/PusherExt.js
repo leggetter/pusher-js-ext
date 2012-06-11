@@ -19,70 +19,8 @@
       Pusher.authorizers['multPreAuth'] = PusherExt.multiPreAuth
     }
     /////
-    
-    /////
-    // additional auth params
-    Pusher.authorizers.ajax = PusherExt.ajaxAuth;
   };
   extend(PusherExt, Pusher);
-  
-  ///////////////////////////////////////
-  // Standard auth but with additional parameter support e.g. for CSRF token
-  
-  PusherExt.ajaxAuth = function(pusher, callback){
-    var self = this, xhr;
-
-    if (Pusher.XHR) {
-      xhr = new Pusher.XHR();
-    } else {
-      xhr = (window.XMLHttpRequest ? new window.XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
-    }
-
-    xhr.open("POST", Pusher.channel_auth_endpoint, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          var data, parsed = false;
-
-          try {
-            data = JSON.parse(xhr.responseText);
-            parsed = true;
-          } catch (e) {
-            callback(true, 'JSON returned from webapp was invalid, yet status code was 200. Data was: ' + xhr.responseText);
-          }
-
-          if (parsed) { // prevents double execution.
-            callback(false, data);
-          }
-        } else {
-          Pusher.warn("Couldn't get auth info from your webapp", status);
-          callback(true, xhr.status);
-        }
-      }
-    };
-    var authParams = {
-      socket_id: pusher.connection.socket_id,
-      channel_name: self.name
-    };
-    
-    if(pusher.options.authParams) {
-      for(var paramName in pusher.options.authParams) {
-        if(authParams[paramName] === undefined) {
-          authParams[paramName] = pusher.options.authParams[paramName];
-        }
-      }
-    }
-    
-    var dataStr = '';
-    var paramValue;
-    for(var paramName in authParams) {
-      paramValue = authParams[paramName];
-      dataStr += paramName + '=' + encodeURIComponent( paramValue ) + '&';
-    }
-    dataStr = dataStr.substring(0, dataStr.length);
-    xhr.send(dataStr);
-  };
   
   ///////////////////////////////////////
   // Multi Auth

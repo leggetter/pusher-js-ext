@@ -13,11 +13,11 @@ $(function(){
       
       var authData = convertAuthData(data);
       
-      equals(typeof authData['private-channel1'].auth, 'string');
-      
-      equals(typeof authData['private-channel2'].auth, 'string');
-      
-      equals(typeof authData['private-channel3'].auth, 'string');
+      equal(typeof authData['private-channel1'].auth, 'string');
+           
+      equal(typeof authData['private-channel2'].auth, 'string');
+           
+      equal(typeof authData['private-channel3'].auth, 'string');
       
       start();
     })
@@ -54,7 +54,7 @@ $(function(){
   }
   
   function checkPresenceAuthData(channelName, channelData){
-    equals(typeof channelData[channelName].auth, 'string');
+    equal(typeof channelData[channelName].auth, 'string');
     ok( channelData[channelName].channel_data !== undefined );    
     ok( channelData[channelName].channel_data.user_id !== undefined );
   }
